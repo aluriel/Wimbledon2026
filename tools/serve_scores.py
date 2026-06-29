@@ -8,7 +8,7 @@ Flask web sunucusu: Wimbledon 2026 Erkekler ve Kadınlar Tekler takip sayfası.
 import json
 import re
 from datetime import datetime, timezone, timedelta
-from flask import Flask, jsonify, Response, request
+from flask import Flask, jsonify, Response, request, redirect
 import requests
 
 TRT = timezone(timedelta(hours=3), name="TRT")
@@ -745,7 +745,6 @@ def build_html(matches: list[dict]) -> str:
 
 @app.route("/")
 def index():
-    from flask import redirect
     return redirect("/bracket?event=mens")
 
 
