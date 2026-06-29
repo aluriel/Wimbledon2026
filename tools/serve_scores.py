@@ -534,7 +534,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   [data-theme="mint"] .winner .player-name, [data-theme="mint"] .winner .player-short { color: #064e3b; }
   [data-theme="mint"] .player-flag-ph { background: #e2e8f0; }
   [data-theme="mint"] .score-display { background: #e8edf4; color: #0f172a; }
-  [data-theme="mint"] .live .score-display { background: #78350f; color: #fbbf24; }
+  [data-theme="mint"] .live .score-display { background: #fef3c7; color: #92400e; }
   [data-theme="mint"] .score-display.pending { color: #94a3b8; }
   [data-theme="mint"] .set-detail { color: #64748b; }
   [data-theme="mint"] .match-status .event-label { color: #64748b; }
@@ -745,6 +745,12 @@ def build_html(matches: list[dict]) -> str:
 
 @app.route("/")
 def index():
+    from flask import redirect
+    return redirect("/bracket?event=mens")
+
+
+@app.route("/matches")
+def matches_page():
     matches = get_matches()
     return Response(build_html(matches), mimetype="text/html; charset=utf-8")
 
@@ -1031,14 +1037,16 @@ BRACKET_HTML_TEMPLATE = """<!DOCTYPE html>
   [data-theme="mint"] .bseed { color: #065f46; background: #d1fae5; }
   [data-theme="mint"] .bsets { color: #94a3b8; }
   [data-theme="mint"] .bsets-win { color: #065f46; }
+  [data-theme="mint"] .bsets-live { color: #b45309; }
   [data-theme="mint"] .bdetail { border-top-color: #f1f5f9; }
   [data-theme="mint"] .bm.done .bdetail { color: #64748b; }
+  [data-theme="mint"] .bm.live .bdetail { color: #b45309; background: rgba(180,83,9,0.06); }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <a href="/" class="back-btn">&#8592; Maçlar</a>
+  <a href="/matches" class="back-btn">&#8592; Maçlar</a>
   <div class="header-title">&#127938; Wimbledon <span>2026</span> — Tur Tablosu</div>
   <div class="meta">__UPDATED__</div>
   <div class="event-tabs">
