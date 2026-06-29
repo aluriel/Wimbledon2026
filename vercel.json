@@ -1,0 +1,14 @@
+{
+  "builds": [
+    {
+      "src": "tools/serve_scores.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "tools/serve_scores.py"
+    }
+  ]
+}
