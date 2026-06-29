@@ -106,6 +106,7 @@ def _parse_competition(comp: dict, grouping_name: str) -> dict | None:
     def _player(c: dict) -> dict:
         athlete = c.get("athlete", {})
         flag = athlete.get("flag", {})
+        cr = c.get("curatedRank")
         return {
             "id":       str(c.get("id", "")),
             "name":     athlete.get("displayName", ""),
@@ -113,6 +114,7 @@ def _parse_competition(comp: dict, grouping_name: str) -> dict | None:
             "flag":     flag.get("href", ""),
             "flag_alt": flag.get("alt", ""),
             "winner":   c.get("winner", False),
+            "rank":     int(cr["current"]) if cr and cr.get("current") else None,
         }
 
     p1 = _player(p1_raw)
@@ -150,7 +152,8 @@ def _parse_competition(comp: dict, grouping_name: str) -> dict | None:
         "p1_short":    p1["short"],
         "p1_flag":     p1["flag"],
         "p1_flag_alt": p1["flag_alt"],
-        "p1_seed":     _seed_for(p1["name"]),
+        "p1_seed":     _seed_for(p1["name"]) or p1["rank"],
+        "p1_rank":     p1["rank"],
         "p1_sets":     p1_sets,
         "p1_winner":   p1["winner"],
         "p2_id":       p2["id"],
@@ -158,7 +161,8 @@ def _parse_competition(comp: dict, grouping_name: str) -> dict | None:
         "p2_short":    p2["short"],
         "p2_flag":     p2["flag"],
         "p2_flag_alt": p2["flag_alt"],
-        "p2_seed":     _seed_for(p2["name"]),
+        "p2_seed":     _seed_for(p2["name"]) or p2["rank"],
+        "p2_rank":     p2["rank"],
         "p2_sets":     p2_sets,
         "p2_winner":   p2["winner"],
         "set_detail":  set_detail,
@@ -780,14 +784,82 @@ COL_GAP = 32         # px: gap between round columns (room for connector lines)
 
 
 def _build_bracket_cols(matches: list[dict], event_key: str) -> list[list[dict]]:
-    """Return 7 lists (one per round) of matches sorted by match_id (bracket slot order)."""
+    """Return 7 lists (one per round) in correct bracket slot order.
+
+    ESPN assigns match IDs by court schedule, not bracket position. We
+    reconstruct bracket order by:
+      1. Sorting each round by minimum curatedRank (seed) in the match.
+      2. Working backwards from the latest round: for each match in a later
+         round, finding its two feeder matches in the previous round via
+         player IDs and placing them in adjacent slots.
+      3. Appending unlinked matches (still TBD) sorted by seed after the
+         linked ones.
+    """
     evt = [m for m in matches if m["event_key"] == event_key]
-    cols = []
+
+    raw_cols = []
     for rnd_raw, _ in BRACKET_ROUNDS:
-        rnd_matches = [m for m in evt if m["round_raw"] == rnd_raw]
-        rnd_matches.sort(key=lambda m: int(m["match_id"]))
-        cols.append(rnd_matches)
-    return cols
+        rnd_m = [m for m in evt if m["round_raw"] == rnd_raw]
+        raw_cols.append(rnd_m)
+
+    def _seed_key(m: dict) -> tuple:
+        ranks = [r for r in (m.get("p1_rank"), m.get("p2_rank")) if r]
+        return (min(ranks) if ranks else 999, int(m["match_id"]))
+
+    def _pid_map(rnd: list[dict]) -> dict:
+        pm = {}
+        for m in rnd:
+            for side in ("p1", "p2"):
+                pid = m.get(f"{side}_id")
+                # Exclude TBD placeholder IDs (ESPN uses negative IDs like "-4", "-3")
+                if pid and pid.lstrip("-").isdigit() and not pid.startswith("-"):
+                    pm[pid] = m
+        return pm
+
+    # Sort each round by seed first (best available ordering for TBD matches)
+    seed_sorted = [sorted(col, key=_seed_key) for col in raw_cols]
+
+    # Now refine using player-ID linkage: work backwards from Final to R1.
+    # For each match in round N, find its two feeder matches in round N-1.
+    ordered = [None] * 7
+    ordered[6] = seed_sorted[6]  # Final: 1 match, seed-sorted is fine
+
+    for ri in range(5, -1, -1):
+        parent_col = ordered[ri + 1]
+        prev_raw = raw_cols[ri]
+
+        if not prev_raw:
+            ordered[ri] = []
+            continue
+
+        if not parent_col:
+            ordered[ri] = seed_sorted[ri]
+            continue
+
+        pid_map = _pid_map(prev_raw)
+        result = []
+        used = set()
+
+        for parent in parent_col:
+            feeders = []
+            for side in ("p1", "p2"):
+                pid = parent.get(f"{side}_id")
+                if pid and pid in pid_map:
+                    feeder = pid_map[pid]
+                    if feeder["match_id"] not in used:
+                        feeders.append(feeder)
+                        used.add(feeder["match_id"])
+            feeders.sort(key=_seed_key)
+            result.extend(feeders)
+
+        # Append unlinked matches (TBD — can't determine slot yet) sorted by seed
+        unlinked = [m for m in prev_raw if m["match_id"] not in used]
+        unlinked.sort(key=_seed_key)
+        result.extend(unlinked)
+
+        ordered[ri] = result
+
+    return ordered
 
 
 def _bracket_card(m: dict) -> str:
