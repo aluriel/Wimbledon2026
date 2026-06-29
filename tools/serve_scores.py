@@ -7,9 +7,20 @@ Flask web sunucusu: Wimbledon 2026 Erkekler ve Kadınlar Tekler takip sayfası.
 
 import json
 import re
+import unicodedata
 from datetime import datetime, timezone, timedelta
 from flask import Flask, jsonify, Response, request, redirect
 import requests
+
+# Official draw order (draw positions 1..128). ESPN's API does not expose draw
+# positions, so we use the published draw to order the bracket view correctly.
+try:
+    from draw_data import MENS_DRAW_2026, WOMENS_DRAW_2026
+except ImportError:  # pragma: no cover - import path differs under Vercel
+    try:
+        from tools.draw_data import MENS_DRAW_2026, WOMENS_DRAW_2026
+    except ImportError:
+        MENS_DRAW_2026, WOMENS_DRAW_2026 = [], []
 
 TRT = timezone(timedelta(hours=3), name="TRT")
 
@@ -53,6 +64,56 @@ EVENT_KEY = {
     "Men's Singles":   "erkekler-tekler",
     "Women's Singles": "kadinlar-tekler",
 }
+
+
+# ---------------------------------------------------------------------------
+# Draw-position lookup (for correct bracket ordering)
+# ---------------------------------------------------------------------------
+
+def _norm_name(s: str) -> str:
+    s = unicodedata.normalize("NFKD", s or "").encode("ascii", "ignore").decode().upper()
+    return re.sub(r"[^A-Z]", "", s)
+
+
+def _build_draw_index(draw: list) -> tuple[dict, dict]:
+    """Return (by_surname, by_tokens). Draw position is the 1-based list index."""
+    by_sur: dict = {}   # surname -> list of (first_initial, pos)
+    by_tok: dict = {}   # frozenset({first, last}) -> pos  (handles name-order swaps)
+    for i, (first, last) in enumerate(draw):
+        pos = i + 1
+        by_sur.setdefault(_norm_name(last), []).append((_norm_name(first)[:1], pos))
+        by_tok[frozenset((_norm_name(first), _norm_name(last)))] = pos
+    return by_sur, by_tok
+
+
+DRAW_INDEX = {
+    "erkekler-tekler": _build_draw_index(MENS_DRAW_2026),
+    "kadinlar-tekler": _build_draw_index(WOMENS_DRAW_2026),
+}
+
+
+def _draw_position(short_name: str, display_name: str, by_sur: dict, by_tok: dict):
+    """Best-effort draw position (1..128) for an ESPN player; None if unknown/TBD."""
+    # Exact token-set match first (handles e.g. "Wu Yibing" name-order swaps).
+    toks = frozenset(_norm_name(t) for t in (display_name or "").split() if t)
+    if toks in by_tok:
+        return by_tok[toks]
+    # Otherwise use surname + first initial from shortName ("T. Tirante", "J.M. Cerundolo").
+    m = re.match(r"^((?:[A-Za-z]\.)+)\s+(.+)$", short_name or "")
+    if m:
+        sur, ini = _norm_name(m.group(2)), _norm_name(m.group(1))[:1]
+    else:
+        parts = (display_name or "").split()
+        sur = _norm_name(" ".join(parts[1:]) or display_name)
+        ini = _norm_name(parts[0])[:1] if parts else ""
+    cands = by_sur.get(sur, [])
+    if len(cands) == 1:
+        return cands[0][1]
+    for cand_ini, pos in cands:
+        if cand_ini == ini:
+            return pos
+    return cands[0][1] if cands else None
+
 
 _cache: dict = {"data": None, "refresh_at": None}
 
@@ -786,14 +847,11 @@ COL_GAP = 32         # px: gap between round columns (room for connector lines)
 def _build_bracket_cols(matches: list[dict], event_key: str) -> list[list[dict]]:
     """Return 7 lists (one per round) in correct bracket slot order.
 
-    ESPN assigns match IDs by court schedule, not bracket position. We
-    reconstruct bracket order by:
-      1. Sorting each round by minimum curatedRank (seed) in the match.
-      2. Working backwards from the latest round: for each match in a later
-         round, finding its two feeder matches in the previous round via
-         player IDs and placing them in adjacent slots.
-      3. Appending unlinked matches (still TBD) sorted by seed after the
-         linked ones.
+    ESPN assigns match IDs by court schedule, not bracket position, and its API
+    does not expose draw positions. When we have the official draw for an event
+    (see draw_data.py), we order each round by the lowest draw position present
+    in the match — this reproduces the real bracket exactly. Otherwise we fall
+    back to seed + player-ID reconstruction.
     """
     evt = [m for m in matches if m["event_key"] == event_key]
 
@@ -801,6 +859,29 @@ def _build_bracket_cols(matches: list[dict], event_key: str) -> list[list[dict]]
     for rnd_raw, _ in BRACKET_ROUNDS:
         rnd_m = [m for m in evt if m["round_raw"] == rnd_raw]
         raw_cols.append(rnd_m)
+
+    # Preferred: order by official draw position.
+    draw_idx = DRAW_INDEX.get(event_key)
+    if draw_idx and draw_idx[0]:
+        by_sur, by_tok = draw_idx
+
+        def _draw_anchor(m: dict) -> int:
+            positions = []
+            for side in ("p1", "p2"):
+                pos = _draw_position(m.get(f"{side}_short", ""),
+                                     m.get(f"{side}_name", ""), by_sur, by_tok)
+                if pos:
+                    positions.append(pos)
+            return min(positions) if positions else 9999
+
+        return [sorted(col, key=lambda m: (_draw_anchor(m), int(m["match_id"])))
+                for col in raw_cols]
+
+    return _build_bracket_cols_fallback(raw_cols)
+
+
+def _build_bracket_cols_fallback(raw_cols: list[list[dict]]) -> list[list[dict]]:
+    """Seed + player-ID bracket reconstruction (used when no draw data exists)."""
 
     def _seed_key(m: dict) -> tuple:
         ranks = [r for r in (m.get("p1_rank"), m.get("p2_rank")) if r]
