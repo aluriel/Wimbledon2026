@@ -452,6 +452,96 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     .header-title h1 { font-size: 1.1rem; }
     .set-detail { font-size: 0.62rem; }
   }
+
+  /* Theme toggle button */
+  .theme-btn {
+    background: transparent; color: #86efac; border: 1px solid #2a3e2a;
+    padding: 7px 14px; border-radius: 20px; font-size: 0.82rem; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .theme-btn:hover { background: #1a4d2e; color: #fff; }
+
+  /* ===== Navy theme overrides ===== */
+  [data-theme="navy"] body { background: #0a0e1a; }
+  [data-theme="navy"] .header { background: linear-gradient(135deg,#1a237e 0%,#283593 50%,#1565c0 100%); border-bottom-color: #ffd700; }
+  [data-theme="navy"] .header-title .year { color: #ffd700; }
+  [data-theme="navy"] .meta { color: #90caf9; }
+  [data-theme="navy"] .bracket-btn { color: #90caf9; border-color: #374151; }
+  [data-theme="navy"] .bracket-btn:hover { background: #1f2937; border-color: #3b82f6; color: #fff; }
+  [data-theme="navy"] .theme-btn { color: #90caf9; border-color: #374151; }
+  [data-theme="navy"] .theme-btn:hover { background: #374151; color: #fff; }
+  [data-theme="navy"] .refresh-btn { background: #ffd700; color: #000; }
+  [data-theme="navy"] .refresh-btn:hover { background: #ffec6e; }
+  [data-theme="navy"] .filter-bar { background: #111827; border-bottom-color: #1f2937; }
+  [data-theme="navy"] .filter-label { color: #6b7280; }
+  [data-theme="navy"] .filter-btn { background: #1f2937; color: #9ca3af; border-color: #374151; }
+  [data-theme="navy"] .filter-btn:hover { background: #374151; color: #e5e7eb; }
+  [data-theme="navy"] .filter-btn.active { background: #1d4ed8; border-color: #1d4ed8; color: #fff; }
+  [data-theme="navy"] .filter-btn.live-btn.active { background: #dc2626; border-color: #dc2626; }
+  [data-theme="navy"] .filter-divider { background: #374151; }
+  [data-theme="navy"] .search-input { background: #1f2937; border-color: #374151; color: #e5e7eb; }
+  [data-theme="navy"] .search-input:focus { border-color: #3b82f6; }
+  [data-theme="navy"] .search-input::placeholder { color: #6b7280; }
+  [data-theme="navy"] .search-icon { color: #6b7280; }
+  [data-theme="navy"] .day-header { background: #111827; border-left-color: #ffd700; color: #ffd700; }
+  [data-theme="navy"] .match-card { background: #111827; border-color: #1f2937; }
+  [data-theme="navy"] .match-card:hover { border-color: #374151; }
+  [data-theme="navy"] .match-card.live { border-color: #fbbf24; background: #131007; }
+  [data-theme="navy"] .match-time .trt-label { color: #6b7280; }
+  [data-theme="navy"] .round-tag { color: #60a5fa; background: #1e3a5f; }
+  [data-theme="navy"] .court-tag { color: #fbd38d; }
+  [data-theme="navy"] .player-flag-ph { background: #374151; }
+  [data-theme="navy"] .score-display { background: #1f2937; }
+  [data-theme="navy"] .score-display.pending { color: #4b5563; }
+  [data-theme="navy"] .set-detail { color: #9ca3af; }
+  [data-theme="navy"] .match-status .event-label { color: #6b7280; }
+  [data-theme="navy"] .badge-scheduled { background: #1f2937; color: #6b7280; }
+  [data-theme="navy"] .no-matches { color: #6b7280; }
+
+  /* ===== Slate & Mint theme ===== */
+  [data-theme="mint"] body { background: #f1f5f9; color: #0f172a; }
+  [data-theme="mint"] .header { background: linear-gradient(135deg,#1e293b 0%,#334155 60%,#1e293b 100%); border-bottom-color: #10b981; }
+  [data-theme="mint"] .header-title .year { color: #6ee7b7; }
+  [data-theme="mint"] .meta { color: #94a3b8; }
+  [data-theme="mint"] .bracket-btn { color: #94a3b8; border-color: #475569; }
+  [data-theme="mint"] .bracket-btn:hover { background: #334155; border-color: #10b981; color: #fff; }
+  [data-theme="mint"] .theme-btn { color: #94a3b8; border-color: #475569; }
+  [data-theme="mint"] .theme-btn:hover { background: #334155; color: #fff; }
+  [data-theme="mint"] .refresh-btn { background: #10b981; color: #fff; }
+  [data-theme="mint"] .refresh-btn:hover { background: #059669; }
+  [data-theme="mint"] .filter-bar { background: #e8edf4; border-bottom-color: #e2e8f0; }
+  [data-theme="mint"] .filter-label { color: #64748b; }
+  [data-theme="mint"] .filter-btn { background: #f1f5f9; color: #64748b; border-color: #e2e8f0; }
+  [data-theme="mint"] .filter-btn:hover { background: #e2e8f0; color: #0f172a; }
+  [data-theme="mint"] .filter-btn.active { background: #10b981; border-color: #10b981; color: #fff; }
+  [data-theme="mint"] .filter-btn.live-btn.active { background: #dc2626; border-color: #dc2626; }
+  [data-theme="mint"] .filter-divider { background: #e2e8f0; }
+  [data-theme="mint"] .search-input { background: #fff; border-color: #e2e8f0; color: #0f172a; }
+  [data-theme="mint"] .search-input:focus { border-color: #10b981; }
+  [data-theme="mint"] .search-input::placeholder { color: #94a3b8; }
+  [data-theme="mint"] .search-icon { color: #94a3b8; }
+  [data-theme="mint"] .day-header { background: #e8edf4; border-left-color: #10b981; color: #0f766e; }
+  [data-theme="mint"] .match-card { background: #fff; border-color: #e2e8f0; }
+  [data-theme="mint"] .match-card:hover { border-color: #cbd5e1; }
+  [data-theme="mint"] .match-card.live { background: #fffdf5; border-color: #f59e0b; }
+  [data-theme="mint"] .match-card.finished { opacity: 0.9; }
+  [data-theme="mint"] .match-time .time { color: #0f172a; }
+  [data-theme="mint"] .match-time .trt-label { color: #94a3b8; }
+  [data-theme="mint"] .round-tag { color: #065f46; background: #d1fae5; }
+  [data-theme="mint"] .court-tag { color: #0f766e; }
+  [data-theme="mint"] .player-name { color: #0f172a; }
+  [data-theme="mint"] .player-short { color: #0f172a; }
+  [data-theme="mint"] .winner .player-name, [data-theme="mint"] .winner .player-short { color: #064e3b; }
+  [data-theme="mint"] .player-flag-ph { background: #e2e8f0; }
+  [data-theme="mint"] .score-display { background: #e8edf4; color: #0f172a; }
+  [data-theme="mint"] .live .score-display { background: #78350f; color: #fbbf24; }
+  [data-theme="mint"] .score-display.pending { color: #94a3b8; }
+  [data-theme="mint"] .set-detail { color: #64748b; }
+  [data-theme="mint"] .match-status .event-label { color: #64748b; }
+  [data-theme="mint"] .venue-text { color: #94a3b8; }
+  [data-theme="mint"] .badge-scheduled { background: #e8edf4; color: #64748b; }
+  [data-theme="mint"] .badge-finished { background: #d1fae5; color: #065f46; }
+  [data-theme="mint"] .no-matches { color: #64748b; }
 </style>
 </head>
 <body>
@@ -465,6 +555,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     </div>
   </div>
   <a href="/bracket?event=mens" class="bracket-btn">&#9776; Tur Tablosu</a>
+  <button class="theme-btn" id="themeBtn" onclick="cycleTheme()">&#9681; Tema</button>
   <button class="refresh-btn" onclick="location.reload()">&#8635; Yenile</button>
 </div>
 
@@ -497,6 +588,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
 <script>
   const TODAY = "__TODAY__";
+  const ROUND_ORDER = ['1. Tur','2. Tur','3. Tur','4. Tur','Çeyrek Final','Yarı Final','Final'];
 
   // --- Match filtering ---
 
@@ -513,6 +605,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     btn.classList.add('active');
     const cards = document.querySelectorAll('.match-card');
     const daySections = document.querySelectorAll('.day-section');
+    const roundIdx = ROUND_ORDER.indexOf(filter);
     cards.forEach(function(card) {
       let show = false;
       if (filter === 'all') show = true;
@@ -520,7 +613,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       else if (filter === 'today') show = card.dataset.date === TODAY;
       else if (filter === 'erkekler-tekler' || filter === 'kadinlar-tekler')
         show = card.dataset.event === filter;
-      else show = card.dataset.round === filter;
+      else if (roundIdx >= 0)
+        show = ROUND_ORDER.indexOf(card.dataset.round) >= roundIdx;
       card.style.display = show ? '' : 'none';
     });
     applyVisibility(cards, daySections);
@@ -549,6 +643,17 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       }
     }
   });
+
+  // --- Theme ---
+  var _themes = ['navy', 'mint', 'green'];
+  var _theme = localStorage.getItem('wim-theme') || 'navy';
+  function _applyTheme(t) {
+    _theme = t;
+    document.documentElement.setAttribute('data-theme', t === 'green' ? '' : t);
+    localStorage.setItem('wim-theme', t);
+  }
+  function cycleTheme() { _applyTheme(_themes[(_themes.indexOf(_theme) + 1) % _themes.length]); }
+  _applyTheme(_theme);
 </script>
 </body>
 </html>
@@ -778,8 +883,12 @@ BRACKET_HTML_TEMPLATE = """<!DOCTYPE html>
 
   /* Bracket layout */
   .bracket-outer { overflow: auto; padding: 0 16px 40px; }
-  .rh-row { display: flex; gap: __COL_GAP__px; padding: 12px 0 8px; position: sticky;
-            top: 61px; background: #0a120a; z-index: 10; width: max-content; }
+  .rh-wrapper {
+    position: sticky; top: 99px; z-index: 10;
+    background: #0a120a; overflow: hidden; padding: 0 16px;
+    border-bottom: 1px solid #1a2e1a;
+  }
+  .rh-row { display: flex; gap: __COL_GAP__px; padding: 10px 0 8px; width: max-content; }
   .rh { width: __COL_W__px; text-align: center; font-size: 0.72rem; font-weight: 700;
         color: #7cfc00; text-transform: uppercase; letter-spacing: 0.06em; }
   .bracket-body { display: flex; gap: __COL_GAP__px; position: relative;
@@ -835,8 +944,95 @@ BRACKET_HTML_TEMPLATE = """<!DOCTYPE html>
   .bm.live .bdetail { color: #fbbf24; background: rgba(251,191,36,0.08); }
   .bm.done .bdetail { color: #a3c4a3; }
 
+  /* Round filter bar */
+  .bracket-filter {
+    background: #0f1a0f; padding: 8px 24px;
+    display: flex; gap: 6px; align-items: center;
+    border-bottom: 1px solid #1a2e1a;
+    position: sticky; top: 61px; z-index: 15;
+  }
+  .bfilt-label { font-size: 0.75rem; color: #4b7a4b; text-transform: uppercase;
+                 letter-spacing: 0.05em; margin-right: 4px; }
+  .bfilt-btn {
+    background: #162416; color: #86a886; border: 1px solid #2a3e2a;
+    padding: 4px 11px; border-radius: 14px; cursor: pointer; font-size: 0.78rem;
+    transition: all 0.15s;
+  }
+  .bfilt-btn:hover { background: #1e341e; color: #c8e6c8; }
+  .bfilt-btn.active { background: #1a5c1a; color: #fff; border-color: #22c55e; }
+
   /* SVG connector lines */
   #blines { position: absolute; top: 0; left: 0; overflow: visible; pointer-events: none; }
+
+  /* Theme toggle button */
+  .theme-btn {
+    background: #162416; color: #86a886; border: 1px solid #2a3e2a;
+    padding: 6px 14px; border-radius: 16px; font-size: 0.82rem; cursor: pointer;
+    transition: all 0.15s;
+  }
+  .theme-btn:hover { background: #1e341e; color: #c8e6c8; }
+
+  /* ===== Navy theme overrides ===== */
+  [data-theme="navy"] body { background: #0a0e1a; }
+  [data-theme="navy"] .header { background: linear-gradient(135deg,#1a237e 0%,#283593 50%,#1565c0 100%); border-bottom-color: #ffd700; }
+  [data-theme="navy"] .header-title { color: #fff; }
+  [data-theme="navy"] .header-title span { color: #ffd700; }
+  [data-theme="navy"] .meta { color: #90caf9; }
+  [data-theme="navy"] .back-btn { background: #1f2937; color: #90caf9; border-color: #374151; }
+  [data-theme="navy"] .back-btn:hover { background: #374151; }
+  [data-theme="navy"] .etab { background: #1f2937; color: #9ca3af; border-color: #374151; }
+  [data-theme="navy"] .etab:hover { background: #374151; color: #e5e7eb; }
+  [data-theme="navy"] .etab.active { background: #1d4ed8; border-color: #1d4ed8; color: #fff; }
+  [data-theme="navy"] .theme-btn { background: #1f2937; color: #90caf9; border-color: #374151; }
+  [data-theme="navy"] .theme-btn:hover { background: #374151; color: #fff; }
+  [data-theme="navy"] .bracket-filter { background: #111827; border-bottom-color: #1f2937; }
+  [data-theme="navy"] .bfilt-label { color: #6b7280; }
+  [data-theme="navy"] .bfilt-btn { background: #1f2937; color: #9ca3af; border-color: #374151; }
+  [data-theme="navy"] .bfilt-btn:hover { background: #374151; color: #e5e7eb; }
+  [data-theme="navy"] .bfilt-btn.active { background: #1d4ed8; border-color: #1d4ed8; color: #fff; }
+  [data-theme="navy"] .rh-wrapper { background: #0a0e1a; border-bottom-color: #1f2937; }
+  [data-theme="navy"] .rh { color: #60a5fa; }
+  [data-theme="navy"] .bm { background: #111827; border-color: #1f2937; }
+  [data-theme="navy"] .bm:hover { border-color: #374151; }
+  [data-theme="navy"] .bm.live { border-color: #fbbf24; background: #131007; }
+  [data-theme="navy"] .bm.tbd { opacity: 0.35; }
+  [data-theme="navy"] .brow { border-bottom-color: #0a0e1a; }
+  [data-theme="navy"] .bseed { color: #60a5fa; background: #1e3a5f; }
+  [data-theme="navy"] .bdetail { border-top-color: #111827; }
+  [data-theme="navy"] .bm.done .bdetail { color: #9ca3af; }
+
+  /* ===== Slate & Mint theme (bracket) ===== */
+  [data-theme="mint"] body { background: #f1f5f9; }
+  [data-theme="mint"] .header { background: linear-gradient(135deg,#1e293b 0%,#334155 60%,#1e293b 100%); border-bottom-color: #10b981; }
+  [data-theme="mint"] .header-title { color: #fff; }
+  [data-theme="mint"] .header-title span { color: #6ee7b7; }
+  [data-theme="mint"] .meta { color: #94a3b8; }
+  [data-theme="mint"] .back-btn { background: #e8edf4; color: #475569; border-color: #e2e8f0; }
+  [data-theme="mint"] .back-btn:hover { background: #e2e8f0; }
+  [data-theme="mint"] .etab { background: #e8edf4; color: #64748b; border-color: #e2e8f0; }
+  [data-theme="mint"] .etab:hover { background: #e2e8f0; color: #0f172a; }
+  [data-theme="mint"] .etab.active { background: #10b981; border-color: #10b981; color: #fff; }
+  [data-theme="mint"] .theme-btn { background: #e8edf4; color: #475569; border-color: #e2e8f0; }
+  [data-theme="mint"] .theme-btn:hover { background: #e2e8f0; color: #0f172a; }
+  [data-theme="mint"] .bracket-filter { background: #e8edf4; border-bottom-color: #e2e8f0; }
+  [data-theme="mint"] .bfilt-label { color: #64748b; }
+  [data-theme="mint"] .bfilt-btn { background: #f1f5f9; color: #64748b; border-color: #e2e8f0; }
+  [data-theme="mint"] .bfilt-btn:hover { background: #e2e8f0; color: #0f172a; }
+  [data-theme="mint"] .bfilt-btn.active { background: #10b981; border-color: #10b981; color: #fff; }
+  [data-theme="mint"] .rh-wrapper { background: #f1f5f9; border-bottom-color: #e2e8f0; }
+  [data-theme="mint"] .rh { color: #0f766e; }
+  [data-theme="mint"] .bm { background: #fff; border-color: #e2e8f0; }
+  [data-theme="mint"] .bm:hover { border-color: #cbd5e1; }
+  [data-theme="mint"] .bm.live { background: #fffdf5; border-color: #f59e0b; }
+  [data-theme="mint"] .bm.tbd { opacity: 0.4; }
+  [data-theme="mint"] .brow { border-bottom-color: #f1f5f9; }
+  [data-theme="mint"] .brow.winner .bname { color: #064e3b; }
+  [data-theme="mint"] .bname { color: #475569; }
+  [data-theme="mint"] .bseed { color: #065f46; background: #d1fae5; }
+  [data-theme="mint"] .bsets { color: #94a3b8; }
+  [data-theme="mint"] .bsets-win { color: #065f46; }
+  [data-theme="mint"] .bdetail { border-top-color: #f1f5f9; }
+  [data-theme="mint"] .bm.done .bdetail { color: #64748b; }
 </style>
 </head>
 <body>
@@ -846,15 +1042,30 @@ BRACKET_HTML_TEMPLATE = """<!DOCTYPE html>
   <div class="header-title">&#127938; Wimbledon <span>2026</span> — Tur Tablosu</div>
   <div class="meta">__UPDATED__</div>
   <div class="event-tabs">
+    <button class="theme-btn" id="themeBtn" onclick="cycleTheme()">&#9681; Tema</button>
     <a href="/bracket?event=mens" class="etab __MENS_ACTIVE__">Erkekler</a>
     <a href="/bracket?event=womens" class="etab __WOMENS_ACTIVE__">Kadınlar</a>
   </div>
 </div>
 
-<div class="bracket-outer">
-  <div class="rh-row">
+<div class="bracket-filter">
+  <span class="bfilt-label">Tur:</span>
+  <button class="bfilt-btn active" onclick="filterBracketRound(0, this)">1T</button>
+  <button class="bfilt-btn" onclick="filterBracketRound(1, this)">2T</button>
+  <button class="bfilt-btn" onclick="filterBracketRound(2, this)">3T</button>
+  <button class="bfilt-btn" onclick="filterBracketRound(3, this)">4T</button>
+  <button class="bfilt-btn" onclick="filterBracketRound(4, this)">ÇF</button>
+  <button class="bfilt-btn" onclick="filterBracketRound(5, this)">YF</button>
+  <button class="bfilt-btn" onclick="filterBracketRound(6, this)">Final</button>
+</div>
+
+<div class="rh-wrapper">
+  <div class="rh-row" id="rhRow">
     __ROUND_HEADERS__
   </div>
+</div>
+
+<div class="bracket-outer" id="bracketOuter">
   <div class="bracket-body" id="bracket">
     __BRACKET_COLS__
     <svg id="blines"></svg>
@@ -865,12 +1076,16 @@ BRACKET_HTML_TEMPLATE = """<!DOCTYPE html>
 function drawLines() {
   var bracket = document.getElementById('bracket');
   var svg = document.getElementById('blines');
+  svg.innerHTML = '';
   var br = bracket.getBoundingClientRect();
   svg.style.width = br.width + 'px';
   svg.style.height = br.height + 'px';
 
-  var rounds = bracket.querySelectorAll('.round-col');
-  var color = '#1e3a1e';
+  var rounds = Array.from(bracket.querySelectorAll('.round-col')).filter(function(r) {
+    return r.style.display !== 'none';
+  });
+  var _th = document.documentElement.getAttribute('data-theme') || 'green';
+  var color = _th === 'mint' ? '#cbd5e1' : (_th === 'navy' ? '#1e3a5f' : '#1e3a1e');
 
   function makeLine(x1, y1, x2, y2) {
     var l = document.createElementNS('http://www.w3.org/2000/svg','line');
@@ -904,7 +1119,43 @@ function drawLines() {
     }
   }
 }
+
+function filterBracketRound(fromIdx, btn) {
+  document.querySelectorAll('.bfilt-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  // Card slot = MATCH_H(76) + desired gap(10) = 86px
+  // With space-around and half the items in same height, each round stays
+  // automatically centered between its predecessor pairs.
+  var SIZES = [64, 32, 16, 8, 4, 2, 1];
+  var newH = fromIdx > 0 ? (SIZES[fromIdx] * 86) + 'px' : '';
+  document.querySelectorAll('.round-col').forEach(function(col, i) {
+    col.style.display = i >= fromIdx ? '' : 'none';
+    col.style.minHeight = newH;
+  });
+  document.querySelectorAll('.rh').forEach(function(rh, i) {
+    rh.style.display = i >= fromIdx ? '' : 'none';
+  });
+  document.getElementById('bracket').style.minHeight = newH;
+  drawLines();
+}
+
 window.addEventListener('load', drawLines);
+
+// Sync round header row with horizontal scroll of bracket
+document.getElementById('bracketOuter').addEventListener('scroll', function() {
+  document.getElementById('rhRow').style.transform = 'translateX(-' + this.scrollLeft + 'px)';
+});
+
+// --- Theme ---
+var _themes = ['navy', 'mint', 'green'];
+var _theme = localStorage.getItem('wim-theme') || 'navy';
+function _applyTheme(t) {
+  _theme = t;
+  document.documentElement.setAttribute('data-theme', t === 'green' ? '' : t);
+  localStorage.setItem('wim-theme', t);
+}
+function cycleTheme() { _applyTheme(_themes[(_themes.indexOf(_theme) + 1) % _themes.length]); }
+_applyTheme(_theme);
 </script>
 </body>
 </html>

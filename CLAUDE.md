@@ -65,6 +65,16 @@ workflows/      # Markdown SOPs defining what to do and how
 
 **Core principle:** Local files are just for processing. Anything I need to see or use lives in cloud services. Everything in `.tmp/` is disposable.
 
+## Local Development Server
+
+After implementing any change to `tools/serve_scores.py`, automatically restart the Flask server so the fix is immediately testable. Use the scratchpad `.bat` launcher so Turkish characters render correctly:
+
+```
+set PYTHONIOENCODING=utf-8 && set PYTHONUTF8=1 && python "C:\Users\Serhat\Downloads\Agentic Workflows\Wimbledon\tools\serve_scores.py"
+```
+
+Kill any existing server process on port 5000 first, then start the new one in the background. No need to ask — just restart and confirm it's running.
+
 ## GitHub
 
 Always ask before pushing any changes to GitHub. Make all local edits first, confirm they work, then explicitly ask "Should I push this to GitHub?" before running any `git push` command. Never push automatically as part of completing a task.
